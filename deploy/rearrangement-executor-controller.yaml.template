@@ -1,0 +1,104 @@
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: rearrangement-executor-controller
+subjects:
+- kind: ServiceAccount
+  name: rearrangement-executor-controller
+  namespace: golem
+roleRef:
+  kind: ClusterRole
+  name: rearrangement-executor-controller
+  apiGroup: rbac.authorization.k8s.io
+---
+
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: rearrangement-executor-controller
+rules:
+- apiGroups:
+  - golem.spot-os.io
+  resources:
+  - evacuationplans
+  - evacuationplans/status
+  verbs:
+  - get
+  - list
+  - watch
+  - update
+  - create
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - namespaces
+  - configmaps
+  - events
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+    - ""
+    resources:
+    - nodes
+    verbs:
+    - get
+    - list
+    - watch
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - get
+  - create
+  - update
+  - delete
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: rearrangement-executor-controller
+  namespace: golem
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rearrangement-executor-controller
+  namespace: golem
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: rearrangement-executor-controller
+  template:
+    metadata:
+      labels:
+        name: rearrangement-executor-controller
+    spec:
+      serviceAccountName: rearrangement-executor-controller
+      containers:
+        - name: rearrangement-executor-controller
+          image: $IMAGE
+          args:
+            - '--zap-devel=true'
+          imagePullPolicy: Always
+          env:
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                fieldRef:
+                 apiVersion: v1
+                 fieldPath: metadata.namespace
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                 apiVersion: v1
+                 fieldPath: metadata.namespace
