@@ -37,7 +37,7 @@ func getSchemeBuilders() []*scheme.Builder {
 // AddControllers adds all the controllers to the Manager.
 func SetupWithManager(mgr ctrl.Manager) error {
 	setupWithManagerFuncs := []func(ctrl.Manager) error{
-		setupEvacuationPlannerController,
+		setupRearrangementExecutorController,
 	}
 
 	for _, setupWithManagerFunc := range setupWithManagerFuncs {

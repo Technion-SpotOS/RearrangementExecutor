@@ -22,6 +22,8 @@ rules:
   resources:
   - evacuationplans
   - evacuationplans/status
+  - spotworkloads
+  - spotworkloads/status
   verbs:
   - get
   - list

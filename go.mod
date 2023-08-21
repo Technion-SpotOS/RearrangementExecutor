@@ -3,7 +3,7 @@ module github.com/Technion-SpotOS/RearrangementExecutor
 go 1.19
 
 require (
-	github.com/Technion-SpotOS/EvacuationPlanner v0.0.0-20230820162709-cdcc64a491e1
+	github.com/Technion-SpotOS/EvacuationPlanner v0.0.0-20230821113228-858e55aaaf44
 	github.com/Technion-SpotOS/SpotWorkload v0.0.0-20230820084629-784b582a4af3
 	github.com/go-logr/logr v1.2.3
 	k8s.io/apimachinery v0.26.0

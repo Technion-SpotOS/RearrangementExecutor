@@ -23,7 +23,7 @@ const (
 	metricsPort                            int32 = 8384
 	environmentVariableControllerNamespace       = "POD_NAMESPACE"
 	environmentVariableWatchNamespace            = "WATCH_NAMESPACE"
-	leaderElectionLockName                       = "spot-instance-controller-lock"
+	leaderElectionLockName                       = "spot-rearrangement-executor-lock"
 )
 
 func printVersion(log logr.Logger) {
@@ -72,7 +72,7 @@ func createManager(leaderElectionNamespace, namespace, metricsHost string, metri
 		MetricsBindAddress:      fmt.Sprintf("%s:%d", metricsHost, metricsPort),
 		LeaderElection:          true,
 		LeaderElectionNamespace: leaderElectionNamespace,
-		LeaderElectionID:        "hub-of-hubs-spec-sync-lock",
+		LeaderElectionID:        leaderElectionLockName,
 	}
 
 	// Add support for MultiNamespace set in WATCH_NAMESPACE (e.g ns1,ns2)
